@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "4a5e9e62-ad0b-46d7-b8fb-1a7696872fc9",
+		"name": "PDF Worker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24709541"
+	},
+	"item": [
+		{
+			"name": "Get Screenshot",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"requestType\":\"screenshot\",\r\n    \"mediaGenerationId\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{domain}}/auth/displaygroups/12/venues/2",
+					"host": [
+						"{{domain}}"
+					],
+					"path": [
+						"auth",
+						"displaygroups",
+						"12",
+						"venues",
+						"2"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "domain",
+			"value": "localhost:8787"
+		}
+	]
+}
