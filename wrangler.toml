@@ -1,3 +1,8 @@
 name = "pdf-service"
 main = "src/index.ts"
 compatibility_date = "2023-06-16"
+
+[[ d1_databases ]]
+binding = "auctionpresentor" # i.e. available in your Worker on env.DB
+database_name = "auctionpresentor"
+database_id = "3a2b8998-cce6-4690-a99c-595e83f8e558"

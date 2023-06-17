@@ -8,6 +8,9 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+import ImageService from "./services/images/images-service";
+import PdfService from "./services/pdf/pdf-serverion";
+
 export interface Env {
 	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
 	// MY_KV_NAMESPACE: KVNamespace;
@@ -28,6 +31,45 @@ export default {
 		env: Env,
 		ctx: ExecutionContext
 	): Promise<Response> {
-		return new Response("Hello World! From Development");
+		try {
+			const url = new URL(request.url);
+			const body = await request.json();
+			let result = undefined;
+			
+			switch (url.pathname) {
+				case '/screenshot':
+					const imageService = new ImageService(env);
+	
+					result = await imageService.generateScreenshotAsync(body);
+
+					return new Response('Handling screenshot request');
+	
+				case '/pdf':
+					const pdfService = new PdfService(env);
+
+					result = await pdfService.generatePDFAsync(body);
+
+					return new Response(JSON.stringify(result), {
+						status:200
+					});
+	
+				default:
+					return new Response('Not Found', {
+						status: 404
+					});
+			}
+		}
+		catch(e: any) {
+			if(e.cause) {
+				console.error(e.cause)
+			} else {
+				console.log(e);
+			}
+
+			return new Response("Server Error", {
+				status: 500
+			});
+		}
+		
 	},
 };
