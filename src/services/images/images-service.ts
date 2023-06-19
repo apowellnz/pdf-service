@@ -1,22 +1,27 @@
+import puppeteer from "@cloudflare/puppeteer";
 import BaseService from "../common/base-service";
 
 interface IMediaGeerationRecord {
-    MediaGenerationId:Number,
-    CreateDateTimeUtc:Date,
-    UpdatedDateTimeUtc:Date,
-    MediaStatusId:MediaStatus,
-    MediaTypeId:MediaType,
-    Html:String,
-    IsPrivate:Number,
-    MediaId:Number
+    MediaGenerationId: Number,
+    CreateDateTimeUtc: Date,
+    UpdatedDateTimeUtc: Date,
+    MediaStatusId: MediaStatus,
+    MediaTypeId: MediaType,
+    Html: string,
+    IsPrivate: Number,
+    MediaId: Number
 }
 
 interface IBody {
-    mediaGenerationId:Number
+    mediaGenerationId: number,
+    width: number,
+    height: number,
+    quality: number,
+    type: "jpeg" | "png" | "webp" | undefined
 }
 
 enum MediaStatus {
-    enabled = 1, 
+    enabled = 1,
     disabled = 2,
     pending = 3,
     generated = 4
@@ -32,18 +37,23 @@ export class ScreenshotReponse {
 
 }
 
+class GeneratedRespose {
+
+}
+
+
 export default class ImageService extends BaseService {
     constructor(env: any) {
         super(env);
     }
 
-    public async generateScreenshotAsync(body: IBody): Promise<ScreenshotReponse | null> {
+    public async generateScreenshotAsync(body: IBody): Promise<ScreenshotReponse> {
 
         if (!body.mediaGenerationId) {
             throw new Error('MediaGenerationId Not Found');
         }
         try {
-            const result: IMediaGeerationRecord = await this.DB.prepare(
+            let  result: IMediaGeerationRecord = await this.DB.prepare(
                 `SELECT * 
                 FROM media_generation
                 WHERE MediaGenerationId = ?`
@@ -53,16 +63,19 @@ export default class ImageService extends BaseService {
 
             if (result) {
 
-                if(result.MediaTypeId == MediaType.image) {
+                if (result.MediaTypeId == MediaType.image) {
 
-                    switch(result.MediaStatusId) {
+                    switch (result.MediaStatusId) {
                         case MediaStatus.pending:
+                            const imageResponse = await this.generateImageAsyn(result.Html, body.type, body.width, body.height);
                             break;
                         case MediaStatus.generated:
+                            const generatedResponse = await this.getGeneratedImageAsync(body.mediaGenerationId)
                             break;
-                        default: 
+                        default:
                             break
                     }
+
                 }
             } else {
                 throw new Error('Unabled to get data for media generation')
@@ -74,11 +87,36 @@ export default class ImageService extends BaseService {
             } else {
                 console.error(e)
             }
-            return null;
+            throw e;
         }
 
 
         return new ScreenshotReponse();
+    }
+
+    async generateImageAsyn(html: string, type: "jpeg" | "png" | "webp" | undefined, width: number, height: number): Promise<string | Buffer> {
+
+        console.warn('generateImageAsyn',html, type, width, height)
+        // const puppeteer = new puppeteer();
+        const browser = await puppeteer.launch({headless: false});
+        const page = await browser.newPage();
+
+        // Set the viewport size
+        await page.setViewport({ width, height });
+
+        // Set the HTML content of the page
+        await page.setContent(html);
+
+        // Take a screenshot of the page
+        const imageBuffer = await page.screenshot({ type });
+
+        await browser.close();
+
+        return imageBuffer;
+    }
+
+    async getGeneratedImageAsync(mediaGenerationId: Number): Promise<GeneratedRespose> {
+        return new GeneratedRespose();
     }
 }
 

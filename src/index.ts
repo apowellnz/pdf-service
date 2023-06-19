@@ -35,19 +35,26 @@ export default {
 			const url = new URL(request.url);
 			const body = await request.json();
 			let result = undefined;
-			
+
 			switch (url.pathname) {
 				case '/screenshot':
 					const imageService = new ImageService(env);
-	
-					result = await imageService.generateScreenshotAsync(body);
 
-					return new Response('Handling screenshot request');
+					let imageData = await imageService.generateImageAsyn("<html><body><h1>Hello, world!</h1></body></html>", body.type, body.height, body.width, )
+					return new Response(imageData, {
+						headers: {
+						  'Content-Type': 'image/png',
+						  'Content-Disposition': 'inline; filename="image.png"'
+						}
+					  });
+					// result = await imageService.generateScreenshotAsync(body);
+
+					// return new Response('Handling screenshot request');
 	
 				case '/pdf':
 					const pdfService = new PdfService(env);
 
-					result = await pdfService.generatePDFAsync(body);
+					let result = await pdfService.generatePDFAsync(body);
 
 					return new Response(JSON.stringify(result), {
 						status:200
