@@ -33,32 +33,59 @@ export default {
 	): Promise<Response> {
 		try {
 			const url = new URL(request.url);
-			const body = await request.json();
-			let result = undefined;
+			const body:any = await request.json();
 
 			switch (url.pathname) {
 				case '/screenshot':
+					console.log('env in index', env)
 					const imageService = new ImageService(env);
 
-					let imageData = await imageService.generateImageAsyn("<html><body><h1>Hello, world!</h1></body></html>", body.type, body.height, body.width, )
-					return new Response(imageData, {
-						headers: {
-						  'Content-Type': 'image/png',
-						  'Content-Disposition': 'inline; filename="image.png"'
-						}
-					  });
-					// result = await imageService.generateScreenshotAsync(body);
+					if(!body.html) throw new Error(`No HTML provided in request`);
+					if(!body.type) throw new Error(`No type provided in request`);
+					if(!body.height) throw new Error(`No height provided in request`);
+					if(!body.width) throw new Error(`No width provided in request`);
+					
 
-					// return new Response('Handling screenshot request');
+					const html = decodeURIComponent(body.html); 
+					let imageData = await imageService.generateImageAsyn(html, body.type, body.height, body.width, body.quality )
+					
+					let contentType;
+					let fileExtension;
+					switch (body.type) {
+					  case 'jpeg':
+						contentType = 'image/jpeg';
+						fileExtension = 'jpg';
+						break;
+					  case 'png':
+						contentType = 'image/png';
+						fileExtension = 'png';
+						break;
+					  case 'webp':
+						contentType = 'image/webp';
+						fileExtension = 'webp';
+						break;
+					  default:
+						// Default to PNG if no valid type is specified
+						contentType = 'image/png';
+						fileExtension = 'png';
+					}
+					
+					return new Response(imageData, {
+					  headers: {
+						'Content-Type': contentType,
+						'Content-Disposition': `inline; filename="image.${fileExtension}"`
+					  }
+					});
 	
 				case '/pdf':
-					const pdfService = new PdfService(env);
+					// const pdfService = new PdfService(env);
 
-					let result = await pdfService.generatePDFAsync(body);
+					// let result = await pdfService.generatePDFAsync(body);
 
-					return new Response(JSON.stringify(result), {
-						status:200
-					});
+					// return new Response(JSON.stringify(result), {
+					// 	status:200
+					// });
+					// break;
 	
 				default:
 					return new Response('Not Found', {

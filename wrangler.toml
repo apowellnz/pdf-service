@@ -1,14 +1,7 @@
 name = "pdf-service"
 main = "src/index.ts"
-compatibility_date = "2023-06-16"
+compatibility_date = "2023-03-14"
+node_compat = true
+workers_dev = true
 
-[[ d1_databases ]]
-binding = "auctionpresentor" # i.e. available in your Worker on env.DB
-database_name = "auctionpresentor"
-database_id = "3a2b8998-cce6-4690-a99c-595e83f8e558"
-
-[env.development]
-[[ d1_databases ]]
-binding = "auctionpresentor" # i.e. available in your Worker on env.DB
-database_name = "auctionpresentor_development"
-database_id = "86cac18f-b21b-4aa7-bbe4-7809d7d51101"
+browser = { binding = "MYBROWSER", type = "browser" }
