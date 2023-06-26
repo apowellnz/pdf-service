@@ -36,6 +36,12 @@ So in order to do this, an API needs to be enabled. This is currently in beta, a
 I have done this, and requested it to be enabled for the account 'b56882b2e68ef2592537d549dfb3cbcc'. I done this via discord on the cloudflare server. 
 At the time of writting this, there was no support for PDF generation. No doubt this id due to the 15 second run time of workers and the extra strain this would put on the services. 
 
+Continued...
+
+I have got access now, and the JPEG screenshots work, but nothing else is supported by cloudflare. PDF generated does not allow the printing of a PDF, because I assume it requires a temp file which would not be supported by the provided cloudflare worker service. As they'll not pay for the temp file hosting... 
+
+I have mocked out the code as it should be. So hopefully down the track they will support it.
+
 **For references look:**
 - [blog about it](https://blog.cloudflare.com/introducing-workers-browser-rendering-api/)
 - [Application Form](https://www.cloudflare.com/en-gb/lp/workers-browser-rendering-api/)

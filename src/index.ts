@@ -76,9 +76,9 @@ export default {
 				case '/pdf':
 					const pdfService = new PdfService(env);
 					const pdfhtml = decodeURIComponent(body.html); 
-					let pdfBuffer = await pdfService.generatePDFAsync(pdfhtml, body.height, body.width );
+					let pdfStream = await pdfService.generatePDFAsync(pdfhtml, body.height, body.width );
 
-					return new Response(pdfBuffer, {
+					const response =  new Response(pdfStream, {
 						status:200,
 						headers: {
 							'Content-Type': 'application/pdf',
@@ -89,18 +89,12 @@ export default {
 				default:
 					return new Response('Not Found', {
 						status: 404,
-						
 					});
 			}
 		}
 		catch(e: any) {
-			if(e.cause) {
-				console.error(e.cause)
-			} else {
-				console.log(e);
-			}
-
-			return new Response("Server Error", {
+			console.error(e || e.cause);
+			return new Response(e, {
 				status: 500
 			});
 		}

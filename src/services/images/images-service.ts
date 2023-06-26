@@ -7,6 +7,15 @@ export default class ImageService extends BaseService {
         super(env);
     }
 
+    /**
+     * Will generate a screenshot of the HTML and return as buffer
+     * @param html HTML to generate 
+     * @param type JPEG or PNG. Note PNG is not currently support by cloudflare
+     * @param width width of screenshot
+     * @param height height of screenshot
+     * @param quality quality of screenshot 0 to 100
+     * @returns Buffer of generated screenshot
+     */
     async generateImageAsyn(html: string, type: "jpeg" | "png" , width: number, height: number, quality:number): Promise<string | Buffer> {
 
         const browser = await puppeteer.launch(this.$env.MYBROWSER);
