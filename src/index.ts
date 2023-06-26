@@ -60,10 +60,6 @@ export default {
 						contentType = 'image/png';
 						fileExtension = 'png';
 						break;
-					  case 'webp':
-						contentType = 'image/webp';
-						fileExtension = 'webp';
-						break;
 					  default:
 						// Default to PNG if no valid type is specified
 						contentType = 'image/png';
@@ -78,18 +74,22 @@ export default {
 					});
 	
 				case '/pdf':
-					// const pdfService = new PdfService(env);
+					const pdfService = new PdfService(env);
+					const pdfhtml = decodeURIComponent(body.html); 
+					let pdfBuffer = await pdfService.generatePDFAsync(pdfhtml, body.height, body.width );
 
-					// let result = await pdfService.generatePDFAsync(body);
-
-					// return new Response(JSON.stringify(result), {
-					// 	status:200
-					// });
-					// break;
+					return new Response(pdfBuffer, {
+						status:200,
+						headers: {
+							'Content-Type': 'application/pdf',
+							'Content-Disposition': 'inline; filename="document.pdf"'
+						  }
+					});
 	
 				default:
 					return new Response('Not Found', {
-						status: 404
+						status: 404,
+						
 					});
 			}
 		}
