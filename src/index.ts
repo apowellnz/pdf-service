@@ -9,7 +9,7 @@
  */
 
 import ImageService from "./services/images/images-service";
-import PdfService from "./services/pdf/pdf-serverion";
+import PdfService from "./services/pdf/pdf-service";
 
 export interface Env {
 	// Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
