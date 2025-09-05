@@ -1,4 +1,5 @@
 # pdf-service (PDF Worker )
+(Incomplete do not use this as a starting point. I have missed instructions and details)
 
 ## To Run
 ```
