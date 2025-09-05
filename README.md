@@ -33,7 +33,7 @@ Integrates with the d1 database binding. This is inorder to process requests. As
 There seems to be an issue with the natural support of puppeteer on cloudflare. Due to the nature of how cloudflare works, it doesn't like to host a headless browser on a worker. 
 So in order to do this, an API needs to be enabled. This is currently in beta, and you need to request it to be enabled for your cloudflare account. 
 
-I have done this, and requested it to be enabled for the account 'b56882b2e68ef2592537d549dfb3cbcc'. I done this via discord on the cloudflare server. 
+I have done this, and requested it to be enabled for the account '[Omitted]'. I done this via discord on the cloudflare server. 
 At the time of writting this, there was no support for PDF generation. No doubt this id due to the 15 second run time of workers and the extra strain this would put on the services. 
 
 Continued...
